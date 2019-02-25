@@ -1,9 +1,10 @@
-const { Get, Post } = require('../utils/route')
-
+const { Get, Post, Schema } = require('../utils/route')
+const { addDogSchema } = require('../schemas/dog')
 class Dog {
   @Post('/addDog')
+  @Schema(addDogSchema)
   async addDog (request, reply) {
-    reply.send({ hello: 'addDog' })
+    reply.send({ dog: request.body })
   }
 
   @Get('/dogs')
@@ -12,6 +13,15 @@ class Dog {
   }
 
   @Get('/:dogId')
+  @Schema({
+    params: {
+      type: 'object',
+      properties: {
+        dogId: { type: 'number' }
+      },
+      required: ['dogId']
+    }
+  })
   async dog (request, reply) {
     reply.send({ hello: `dogId:${request.params.dogId}` })
   }

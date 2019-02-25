@@ -13,8 +13,14 @@ const gen = method => path => {
     return elementDescriptor
   }
 }
-
+const Schema = schema => {
+  return function (elementDescriptor) {
+    elementDescriptor.descriptor.value.schema = schema
+    return elementDescriptor
+  }
+}
 module.exports = {
   Get: gen('GET'),
-  Post: gen('POST')
+  Post: gen('POST'),
+  Schema
 }

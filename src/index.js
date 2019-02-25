@@ -19,17 +19,18 @@ function registerAPI (APIConstructor) {
   const apisName = Object.getOwnPropertyNames(
     Object.getPrototypeOf(apisInstance)
   ).filter(key => key !== 'constructor')
-  console.log(apisName, 1111111)
+  // console.log(apisName, 1111111)
   apisName.map(apiName => {
-    const routes = apisInstance[apiName].routes
-    console.log(routes, 2222222)
+    const { routes, schema } = apisInstance[apiName]
+    // console.log(routes, 2222222)
     fastify.register(async (fastify, options) => {
       routes.map(route => {
         const { method, url } = route
         fastify.route({
           url: `/${APIConstructor.name.toLocaleLowerCase()}${url}`,
           method,
-          handler: apisInstance[apiName]
+          handler: apisInstance[apiName],
+          schema
         })
       })
     })
