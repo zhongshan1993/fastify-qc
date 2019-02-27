@@ -2,9 +2,21 @@
 const fastify = require('fastify')({
   logger: true
 })
+const fp = require('fastify-plugin')
+// 加载配置
+fastify.register(require('./plugins/fastify-config-loader'))
+// 非生产环境启动swagger
+fastify.register(
+  fp((fastify, opts, next) => {
+    if (process.env.NODE_ENV !== 'production') {
+      fastify.register(require('fastify-swagger'), fastify.config.swagger)
+    }
+    next()
+  })
+)
+// 注册api
+fastify.register(require('./plugins/fastify-api-loader'))
 
-const apiDog = require('./api/dog')
-registerAPI(apiDog)
 // Run the server!
 fastify.listen(3000, function (err, address) {
   if (err) {
@@ -13,26 +25,7 @@ fastify.listen(3000, function (err, address) {
   }
   fastify.log.info(`server listening on ${address}`)
 })
-
-function registerAPI (APIConstructor) {
-  const apisInstance = new APIConstructor()
-  const apisName = Object.getOwnPropertyNames(
-    Object.getPrototypeOf(apisInstance)
-  ).filter(key => key !== 'constructor')
-  // console.log(apisName, 1111111)
-  apisName.map(apiName => {
-    const { routes, schema } = apisInstance[apiName]
-    // console.log(routes, 2222222)
-    fastify.register(async (fastify, options) => {
-      routes.map(route => {
-        const { method, url } = route
-        fastify.route({
-          url: `/${APIConstructor.name.toLocaleLowerCase()}${url}`,
-          method,
-          handler: apisInstance[apiName],
-          schema
-        })
-      })
-    })
-  })
-}
+fastify.ready(err => {
+  if (err) throw err
+  err || (fastify.swagger && fastify.swagger())
+})

@@ -1,27 +1,22 @@
-const { Get, Post, Schema } = require('../utils/route')
-const { addDogSchema } = require('../schemas/dog')
+const { Get, Post } = require('../utils/route')
+const { addDogSchema, dogsSchema, queryDogSchema } = require('../schemas/dog')
 class Dog {
-  @Post('/addDog')
-  @Schema(addDogSchema)
+  @Post('/addDog', addDogSchema)
   async addDog (request, reply) {
-    reply.send({ dog: request.body })
+    // reply.send({ data: request.body })
+    // reply.send(new Error('该商品已经下架！'))
+    reply.status(400).send({
+      error: 10001,
+      message: '该商品已经下架！'
+    })
   }
 
-  @Get('/dogs')
+  @Get('/dogs', dogsSchema)
   async dogs (request, reply) {
     reply.send({ hello: 'dog-list' })
   }
 
-  @Get('/:dogId')
-  @Schema({
-    params: {
-      type: 'object',
-      properties: {
-        dogId: { type: 'number' }
-      },
-      required: ['dogId']
-    }
-  })
+  @Get('/:dogId', queryDogSchema)
   async dog (request, reply) {
     reply.send({ hello: `dogId:${request.params.dogId}` })
   }
