@@ -1,20 +1,25 @@
-// Require the framework and instantiate it
 const IS_NOT_PRODUCTION = process.env.NODE_ENV !== 'production'
+
+// Require the framework and instantiate it
 const fastify = require('fastify')({
   logger: IS_NOT_PRODUCTION
 })
+
 const fp = require('fastify-plugin')
+
 // 加载配置
 fastify.register(require('./plugins/fastify-config-loader'))
+
 // 非生产环境启动swagger
-fastify.register(
-  fp((fastify, opts, next) => {
-    if (IS_NOT_PRODUCTION) {
+if (IS_NOT_PRODUCTION) {
+  fastify.register(
+    fp((fastify, opts, next) => {
       fastify.register(require('fastify-swagger'), fastify.config.swagger)
-    }
-    next()
-  })
-)
+      next()
+    })
+  )
+}
+
 // 注册api
 fastify.register(require('./plugins/fastify-api-loader'))
 
