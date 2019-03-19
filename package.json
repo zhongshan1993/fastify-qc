@@ -1,15 +1,23 @@
 {
   "scripts": {
-    "start": "nodemon --exec babel-node src/index.js",
+    "start": "babel-node src/index.js",
+    "dev": "nodemon --exec babel-node src/index.js",
     "build": "babel src --out-dir dist",
     "serve": "node dist/index.js",
     "debug": "babel-node test.js"
   },
   "dependencies": {
+    "@grpc/proto-loader": "^0.4.0",
+    "@quancheng/terra-service": "^1.0.201903141741",
+    "@quancheng/zeus-service": "^1.0.201901301643",
+    "eureka-js-client": "^4.4.2",
     "fastify": "^2.0.0",
     "fastify-plugin": "^1.5.0",
+    "fs-extra": "^7.0.1",
     "globby": "^9.0.0",
-    "lodash": "^4.17.11"
+    "grpc": "^1.19.0",
+    "lodash": "^4.17.11",
+    "reach": "^1.0.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",

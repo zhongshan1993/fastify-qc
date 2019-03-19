@@ -9,6 +9,8 @@ const fp = require('fastify-plugin')
 
 // 加载配置
 fastify.register(require('./plugins/fastify-config-loader'))
+// grpc
+fastify.register(require('./plugins/fastify-grpc-client'))
 
 // 非生产环境启动swagger
 if (IS_NOT_PRODUCTION) {

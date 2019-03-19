@@ -27,5 +27,25 @@ module.exports = {
         }
       }
     }
+  },
+  eureka: {
+    name: 'fastify', // 这个应用注册到eureka的名字
+    version: '1.0.0',
+    port: process.env.PORT || 3000,
+    urls: 'http://eureka.dev.quancheng-ec.com/eureka/apps'
+  },
+  grpc: {
+    pbPathsRegExp:
+      process.cwd() +
+      '/node_modules/@quancheng/**/src/main/proto/**/*_service.proto',
+    pemPath: process.cwd() + '/grpc.pem',
+    retry: 5,
+    services: {
+      UserService: 'com.quancheng.zeus.service.UserService:zeus-service:1.0.0'
+    },
+    options: {
+      'grpc.ssl_target_name_override': 'grpc',
+      'grpc.default_authority': 'grpc'
+    }
   }
 }
