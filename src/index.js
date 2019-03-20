@@ -9,6 +9,8 @@ const fp = require('fastify-plugin')
 
 // 加载配置
 fastify.register(require('./plugins/fastify-config-loader'))
+// eureka
+fastify.register(require('./plugins/fastify-eureka'))
 // grpc
 fastify.register(require('./plugins/fastify-grpc-client'))
 
@@ -26,7 +28,7 @@ if (IS_NOT_PRODUCTION) {
 fastify.register(require('./plugins/fastify-api-loader'))
 
 // Run the server!
-fastify.listen(3000, function (err, address) {
+fastify.listen(3000, '0.0.0.0', function (err, address) {
   if (err) {
     fastify.log.error(err)
     process.exit(1)

@@ -17,7 +17,9 @@ class Dog {
   }
 
   @Get('/:dogId', queryDogSchema)
-  async dog (request, reply) {
+  async dog (request, reply, app) {
+    const ret = await app.grpc.CompanyService.get({ companyIds: ['6'] })
+    console.log(ret)
     reply.send({ hello: `dogId:${request.params.dogId}` })
   }
 }

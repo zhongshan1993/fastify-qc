@@ -33,7 +33,7 @@ module.exports = fp(async (fastify, options, next) => {
     const [url, serviceName, version] = services[key].split(':')
     _grpc[key] = proxyHandler(
       fastify,
-      `${serviceName.toUpperCase()}${version}`,
+      `${serviceName}:${version}`,
       Reach(protos, url)
     )
   }
@@ -49,6 +49,8 @@ function proxyHandler (fastify, eurekaServiceName, PB) {
       get: function (target, key, receiver) {
         const { eureka, config } = fastify
         return function (params, metaData = {}) {
+          console.log(params, 888888770000000)
+          // todo 清除过期的client
           const host = _.sample(eureka[eurekaServiceName])
           let client
           if (cache[host]) {

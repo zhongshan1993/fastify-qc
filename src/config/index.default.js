@@ -1,3 +1,4 @@
+const ip = require('ip')
 module.exports = {
   swagger: {
     exposeRoute: true,
@@ -11,7 +12,7 @@ module.exports = {
         url: 'https://swagger.io',
         description: 'Find more info here'
       },
-      host: 'localhost:3000',
+      host: `${ip.address()}:3000`,
       schemes: ['http'],
       consumes: ['application/json'],
       produces: ['application/json'],
@@ -41,7 +42,8 @@ module.exports = {
     pemPath: process.cwd() + '/grpc.pem',
     retry: 5,
     services: {
-      UserService: 'com.quancheng.zeus.service.UserService:zeus-service:1.0.0'
+      UserService: 'com.quancheng.zeus.service.UserService:zeus-service:1.0.0',
+      CompanyService: 'com.quancheng.zeus.service.CompanyService:zeus-service:1.0.0'
     },
     options: {
       'grpc.ssl_target_name_override': 'grpc',
