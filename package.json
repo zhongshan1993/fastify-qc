@@ -11,13 +11,15 @@
     "@quancheng/terra-service": "^1.0.201903141741",
     "@quancheng/zeus-service": "^1.0.201901301643",
     "eureka-js-client": "^4.4.2",
-    "fastify": "^2.0.0",
+    "fastify": "^2.1.0",
     "fastify-plugin": "^1.5.0",
+    "fastify-sequelize": "^1.0.4",
     "fs-extra": "^7.0.1",
     "globby": "^9.0.0",
     "grpc": "^1.19.0",
     "ip": "^1.1.5",
     "lodash": "^4.17.11",
+    "mysql2": "^1.6.5",
     "reach": "^1.0.1"
   },
   "devDependencies": {

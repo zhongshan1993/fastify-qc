@@ -43,11 +43,25 @@ module.exports = {
     retry: 5,
     services: {
       UserService: 'com.quancheng.zeus.service.UserService:zeus-service:1.0.0',
-      CompanyService: 'com.quancheng.zeus.service.CompanyService:zeus-service:1.0.0'
+      CompanyService:
+        'com.quancheng.zeus.service.CompanyService:zeus-service:1.0.0'
     },
     options: {
       'grpc.ssl_target_name_override': 'grpc',
       'grpc.default_authority': 'grpc'
+    }
+  },
+  databases: {
+    zeus: {
+      username: 'qc_test',
+      password: 'Qcwl123456',
+      dialect: 'mysql',
+      host: 'rm-bp1ujlxk5146v9027o.mysql.rds.aliyuncs.com',
+      port: 3306,
+      define: {
+        underscored: true,
+        timestamps: false
+      }
     }
   }
 }

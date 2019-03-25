@@ -8,7 +8,7 @@ const randomHash = () =>
     .slice(-10)
 
 module.exports = fp(async (fastify, options, next) => {
-  const { name, version, port, urls } = fastify.config.eureka
+  const { name, version, port, urls } = options
   const instanceName = `${name}:${version}`
   const genUrl = (pageName = '') => `http://${ipAddr}:${port}/${pageName}`
   const client = new Eureka({

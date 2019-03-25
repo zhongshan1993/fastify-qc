@@ -15,7 +15,7 @@ const opt = {
 }
 
 module.exports = fp(async (fastify, options, next) => {
-  const { pbPathsRegExp, services } = fastify.config.grpc
+  const { pbPathsRegExp, services } = options
   const pbPaths = await globby.sync(pbPathsRegExp)
   let protos = {}
   pbPaths.forEach(path => {
@@ -34,22 +34,22 @@ module.exports = fp(async (fastify, options, next) => {
     _grpc[key] = proxyHandler(
       fastify,
       `${serviceName}:${version}`,
-      Reach(protos, url)
+      Reach(protos, url),
+      options
     )
   }
   fastify.decorate('grpc', _grpc)
   next()
 })
 
-function proxyHandler (fastify, eurekaServiceName, PB) {
+function proxyHandler (fastify, eurekaServiceName, PB, grpcCconfig) {
   let cache = {}
   return new Proxy(
     {},
     {
       get: function (target, key, receiver) {
-        const { eureka, config } = fastify
+        const { eureka } = fastify
         return function (params, metaData = {}) {
-          console.log(params, 888888770000000)
           // todo 清除过期的client
           const host = _.sample(eureka[eurekaServiceName])
           let client
@@ -57,7 +57,7 @@ function proxyHandler (fastify, eurekaServiceName, PB) {
             console.info('client from cache !')
             client = cache[host]
           } else {
-            const pemPath = config.grpc.pemPath
+            const pemPath = grpcCconfig.pemPath
             const sslCreds = grpc.credentials.createSsl(
               fs.readFileSync(pemPath)
             )
@@ -75,11 +75,11 @@ function proxyHandler (fastify, eurekaServiceName, PB) {
             client = cache[host] = new PB(
               host,
               combinedCreds,
-              config.grpc.options
+              grpcCconfig.options
             )
           }
           let retry = 0
-          const maxRetry = config.grpc.retry || 5 // 最大重试次数， 默认5次
+          const maxRetry = grpcCconfig.retry || 5 // 最大重试次数， 默认5次
           let customMetadata = new grpc.Metadata()
           Object.keys(metaData).forEach(k => customMetadata.set(k, metaData[k]))
           return new Promise(function invoke (resolve, reject) {

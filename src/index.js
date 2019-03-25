@@ -5,23 +5,26 @@ const fastify = require('fastify')({
   logger: IS_NOT_PRODUCTION
 })
 
-const fp = require('fastify-plugin')
-
 // 加载配置
 fastify.register(require('./plugins/fastify-config-loader'))
 // eureka
-fastify.register(require('./plugins/fastify-eureka'))
+fastify.register(require('./plugins/fastify-eureka'), parent => {
+  return parent.config.eureka
+})
 // grpc
-fastify.register(require('./plugins/fastify-grpc-client'))
+fastify.register(require('./plugins/fastify-grpc-client'), parent => {
+  return parent.config.grpc
+})
+// db
+fastify.register(require('./plugins/fastify-sequelize'), parent => {
+  return parent.config.databases
+})
 
 // 非生产环境启动swagger
 if (IS_NOT_PRODUCTION) {
-  fastify.register(
-    fp((fastify, opts, next) => {
-      fastify.register(require('fastify-swagger'), fastify.config.swagger)
-      next()
-    })
-  )
+  fastify.register(require('fastify-swagger'), parent => {
+    return parent.config.swagger
+  })
 }
 
 // 注册api

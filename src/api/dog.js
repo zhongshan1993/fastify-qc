@@ -12,7 +12,13 @@ class Dog {
   }
 
   @Get('/dogs', dogsSchema)
-  async dogs (request, reply) {
+  async dogs (request, reply, app) {
+    const ret = await app.db.zeus.model.zeus_account_wechat_relation.findAll({
+      where: {
+        accountId: 103180927175708001
+      }
+    })
+    console.log(ret[0].openId, 88888888888)
     reply.send({ hello: 'dog-list' })
   }
 
