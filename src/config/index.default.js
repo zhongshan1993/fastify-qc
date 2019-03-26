@@ -44,7 +44,9 @@ module.exports = {
     services: {
       UserService: 'com.quancheng.zeus.service.UserService:zeus-service:1.0.0',
       CompanyService:
-        'com.quancheng.zeus.service.CompanyService:zeus-service:1.0.0'
+        'com.quancheng.zeus.service.CompanyService:zeus-service:1.0.0',
+      AccountService:
+        'com.quancheng.zeus.service.AccountService:zeus-service:1.0.0'
     },
     options: {
       'grpc.ssl_target_name_override': 'grpc',
@@ -63,5 +65,7 @@ module.exports = {
         timestamps: false
       }
     }
-  }
+  },
+  wechatServiceUrl: 'http://wechat-service:7001',
+  walaniMpCompanyId: '103170324104449001'
 }

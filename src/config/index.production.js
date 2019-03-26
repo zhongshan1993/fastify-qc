@@ -16,5 +16,6 @@ module.exports = {
         timestamps: false
       }
     }
-  }
+  },
+  walaniMpCompanyId: '103170427203411001'
 }
